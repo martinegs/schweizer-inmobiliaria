@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # No reescribir archivos o directorios que existen
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # No reescribir rutas de la API
+  RewriteCond %{REQUEST_URI} !^/api
+  
+  # Redirigir todo a index.html
+  RewriteRule . /index.html [L]
+</IfModule>

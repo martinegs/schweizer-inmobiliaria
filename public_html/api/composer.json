@@ -1,0 +1,20 @@
+{
+    "name": "schweizer/inmobiliaria-backend",
+    "description": "Backend API para Schweizer Inmobiliaria",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "slim/slim": "^4.12",
+        "slim/psr7": "^1.6",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    }
+}
