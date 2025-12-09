@@ -28,6 +28,17 @@ coverage
 
 .eslintcache
 
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# Backend PHP
+backend/vendor/
+backend/.env
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+
 # Cypress
 /cypress/videos/
 /cypress/screenshots/

@@ -67,8 +67,12 @@
           ></textarea>
         </div>
         
-        <button type="submit" class="submit-button">
-          Enviar mensaje
+        <div v-if="statusMessage" class="status-message" :class="{ success: statusMessage.includes('correctamente'), error: !statusMessage.includes('correctamente') }">
+          {{ statusMessage }}
+        </div>
+        
+        <button type="submit" class="submit-button" :disabled="sending">
+          {{ sending ? 'Enviando...' : 'Enviar mensaje' }}
         </button>
       </form>
     </div>
@@ -110,30 +114,54 @@ onUnmounted(() => {
   }
 })
 
-const handleSubmit = () => {
-  const subject = `Contacto desde web - ${formData.value.subject}`
-  const body = `
-Nombre: ${formData.value.name}
-Email: ${formData.value.email}
-Teléfono: ${formData.value.phone}
-Asunto: ${formData.value.subject}
+const sending = ref(false)
+const statusMessage = ref('')
 
-Mensaje:
-${formData.value.message}
-  `.trim()
+const handleSubmit = async () => {
+  sending.value = true
+  statusMessage.value = ''
   
-  // Reemplaza con tu email
-  const mailtoLink = `mailto:gerenciageneral@schweizerinmobiliaria.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  
-  window.location.href = mailtoLink
-  
-  // Resetear formulario
-  formData.value = {
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
+  try {
+    // Crear FormData para Web3Forms
+    const formDataToSend = new FormData()
+    formDataToSend.append('access_key', '5ab77381-6fa4-42be-b0c5-1ca31ecbebae') // Vas a obtener esto en el paso siguiente
+    formDataToSend.append('name', formData.value.name)
+    formDataToSend.append('email', formData.value.email)
+    formDataToSend.append('phone', formData.value.phone)
+    formDataToSend.append('subject', `Contacto desde web - ${formData.value.subject}`)
+    formDataToSend.append('message', formData.value.message)
+    
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formDataToSend
+    })
+    
+    const result = await response.json()
+    
+    if (response.ok && result.success) {
+      statusMessage.value = 'Mensaje enviado correctamente. Nos contactaremos pronto.'
+      
+      // Resetear formulario
+      formData.value = {
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      }
+      
+      // Limpiar mensaje después de 5 segundos
+      setTimeout(() => {
+        statusMessage.value = ''
+      }, 5000)
+    } else {
+      statusMessage.value = result.message || 'Error al enviar el mensaje. Intenta nuevamente.'
+    }
+  } catch (error) {
+    statusMessage.value = 'Error de conexión. Por favor intenta nuevamente.'
+    console.error('Error:', error)
+  } finally {
+    sending.value = false
   }
 }
 </script>
@@ -244,6 +272,31 @@ ${formData.value.message}
 
 .submit-button:active {
   transform: translateY(0);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.status-message.success {
+  background: rgba(76, 175, 80, 0.2);
+  border: 2px solid #4caf50;
+  color: #4caf50;
+}
+
+.status-message.error {
+  background: rgba(244, 67, 54, 0.2);
+  border: 2px solid #f44336;
+  color: #f44336;
 }
 
 @media (max-width: 768px) {

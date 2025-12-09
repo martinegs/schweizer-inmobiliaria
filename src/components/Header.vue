@@ -8,6 +8,7 @@
         <nav class="nav">
           <a href="#inicio" class="nav-link">Inicio</a>
           <a href="#nosotros" class="nav-link">Nosotros</a>
+          <a href="#propiedades" class="nav-link">Propiedades</a>
           <a href="#contacto-form" class="nav-link">Contacto</a>
         </nav>
       </div>

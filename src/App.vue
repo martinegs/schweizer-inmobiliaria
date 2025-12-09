@@ -1,20 +1,10 @@
 <script setup>
-import Header from './components/Header.vue'
-import Hero from './components/Hero.vue'
-import About from './components/About.vue'
-import ContactForm from './components/ContactForm.vue'
-import Footer from './components/Footer.vue'
+// La app ahora usa Vue Router
 </script>
 
 <template>
   <div class="app">
-    <Header />
-    <main>
-      <Hero />
-      <About />
-      <ContactForm />
-    </main>
-    <Footer />
+    <router-view />
   </div>
 </template>
 
