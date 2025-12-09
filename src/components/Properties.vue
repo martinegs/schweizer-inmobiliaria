@@ -233,10 +233,10 @@ onMounted(async () => {
           bathrooms: p.banos,
           size: Number(p.superficie),
           images: p.imagenes && p.imagenes.length > 0
-            ? p.imagenes.map(img => `${import.meta.env.VITE_API_URL.replace('/api', '')}/uploads/${img}`)
+            ? p.imagenes.map(img => `${import.meta.env.VITE_API_URL}/public/uploads/${img}`)
             : ['/img/placeholder.jpg'],
           image: p.imagenes && p.imagenes.length > 0 
-            ? `${import.meta.env.VITE_API_URL.replace('/api', '')}/uploads/${p.imagenes[0]}`
+            ? `${import.meta.env.VITE_API_URL}/public/uploads/${p.imagenes[0]}`
             : '/img/placeholder.jpg'
         }
       })

@@ -264,7 +264,7 @@ const propiedadId = computed(() => route.params.id)
 const esEdicion = computed(() => !!propiedadId.value)
 
 const getImageUrl = (filename) => {
-  return `${import.meta.env.VITE_API_URL.replace('/api', '')}/uploads/${filename}`
+  return `${import.meta.env.VITE_API_URL}/public/uploads/${filename}`
 }
 
 const cargarPropiedad = async () => {
