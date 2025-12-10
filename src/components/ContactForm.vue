@@ -92,9 +92,16 @@ const formData = ref({
 
 const checkSubject = () => {
   const savedSubject = sessionStorage.getItem('contactSubject')
+  const savedPropertyInfo = sessionStorage.getItem('propertyInfo')
+  
   if (savedSubject) {
     formData.value.subject = savedSubject
     sessionStorage.removeItem('contactSubject')
+  }
+  
+  if (savedPropertyInfo) {
+    formData.value.message = `Hola! ${savedPropertyInfo} está disponible. Me gustaría obtener más información.`
+    sessionStorage.removeItem('propertyInfo')
   }
 }
 

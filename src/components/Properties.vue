@@ -369,7 +369,7 @@ const prevImage = () => {
 
 const contactWhatsApp = (property) => {
   const phone = '5492613725657'
-  const message = `Hola! Me interesa ${property.title}. ${property.location}. Precio: ${property.divisa} ${property.price.toLocaleString('es-AR')}`
+  const message = `Hola! Me interesa la propiedad: ${property.title} en ${property.location}. Precio: ${property.divisa} ${property.price.toLocaleString('es-AR')}. Me gustaría obtener más información.`
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
   window.open(url, '_blank')
 }
