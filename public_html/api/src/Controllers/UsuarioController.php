@@ -21,6 +21,13 @@ class UsuarioController
     
     public function getAll(Request $request, Response $response)
     {
+        // Verificar que sea super admin (ID 1)
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+            $error = ['success' => false, 'message' => 'Acceso denegado'];
+            $response->getBody()->write(json_encode($error));
+            return $response->withStatus(403)->withHeader('Content-Type', 'application/json');
+        }
+        
         try {
             $stmt = $this->pdo->query("
                 SELECT id, email, nombre, activo, created_at, updated_at 
@@ -40,6 +47,13 @@ class UsuarioController
     
     public function create(Request $request, Response $response)
     {
+        // Verificar que sea super admin (ID 1)
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+            $error = ['success' => false, 'message' => 'Acceso denegado'];
+            $response->getBody()->write(json_encode($error));
+            return $response->withStatus(403)->withHeader('Content-Type', 'application/json');
+        }
+        
         $data = json_decode($request->getBody()->getContents(), true);
         
         $email = $data['email'] ?? '';
@@ -88,6 +102,13 @@ class UsuarioController
     
     public function update(Request $request, Response $response, $args)
     {
+        // Verificar que sea super admin (ID 1)
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+            $error = ['success' => false, 'message' => 'Acceso denegado'];
+            $response->getBody()->write(json_encode($error));
+            return $response->withStatus(403)->withHeader('Content-Type', 'application/json');
+        }
+        
         $id = $args['id'];
         $data = json_decode($request->getBody()->getContents(), true);
         
@@ -143,10 +164,23 @@ class UsuarioController
     
     public function delete(Request $request, Response $response, $args)
     {
+        // Verificar que sea super admin (ID 1)
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+            $error = ['success' => false, 'message' => 'Acceso denegado'];
+            $response->getBody()->write(json_encode($error));
+            return $response->withStatus(403)->withHeader('Content-Type', 'application/json');
+        }
+        
         $id = $args['id'];
         
         try {
-            session_start();
+            // No permitir eliminar al usuario ID 1
+            if ($id == 1) {
+                $error = ['success' => false, 'message' => 'No se puede eliminar al super administrador'];
+                $response->getBody()->write(json_encode($error));
+                return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+            }
+            
             // No permitir que el usuario se elimine a sí mismo
             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $id) {
                 $error = ['success' => false, 'message' => 'No puedes eliminarte a ti mismo'];

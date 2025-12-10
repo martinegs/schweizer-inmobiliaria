@@ -48,7 +48,8 @@ const routes = [
       {
         path: 'usuarios',
         name: 'AdminUsuarios',
-        component: AdminUsuarios
+        component: AdminUsuarios,
+        meta: { requiresSuperAdmin: true }
       }
     ]
   }
@@ -73,11 +74,21 @@ const router = createRouter({
 
 // Guard de autenticación
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiresAuth) {
+  if (to.meta.requiresAuth || to.meta.requiresSuperAdmin) {
     try {
       const response = await checkAuth()
       if (response.data.authenticated) {
-        next()
+        // Verificar si la ruta requiere super admin
+        if (to.meta.requiresSuperAdmin) {
+          if (response.data.user && response.data.user.id === 1) {
+            next()
+          } else {
+            // Redirigir a propiedades si no es super admin
+            next('/admin/propiedades')
+          }
+        } else {
+          next()
+        }
       } else {
         next('/admin/login')
       }

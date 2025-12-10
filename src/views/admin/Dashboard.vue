@@ -10,7 +10,7 @@
         <router-link to="/admin/propiedades" class="nav-link">
           Propiedades
         </router-link>
-        <router-link to="/admin/usuarios" class="nav-link">
+        <router-link v-if="isSuperAdmin" to="/admin/usuarios" class="nav-link">
           Usuarios
         </router-link>
       </div>
@@ -38,12 +38,14 @@ import { logout, checkAuth } from '../../api'
 
 const router = useRouter()
 const username = ref('Admin')
+const isSuperAdmin = ref(false)
 
 onMounted(async () => {
   try {
     const response = await checkAuth()
     if (response.data.authenticated && response.data.user) {
       username.value = response.data.user.nombre || response.data.user.email
+      isSuperAdmin.value = response.data.user.id === 1
     }
   } catch (error) {
     console.error('Error al verificar auth:', error)
