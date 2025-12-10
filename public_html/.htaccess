@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteBase /
   
+  # Redirigir favicon.ico a /img/2.png
+  RewriteRule ^favicon\.ico$ /img/2.png [L]
+  
   # No reescribir archivos o directorios que existen
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
